@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee09ad02a39d6634d92dd903b5a4697a, type: 3}
+  m_Name: EmailGeneratorConfig
+  m_EditorClassIdentifier: 
+  titlePrefixes:
+  - Night shift
+  - Morning
+  - Security
+  - System
+  - Network
+  - Camera
+  - Evening
+  - Weekly
+  - Daily
+  - Incident
+  - Service
+  - Update
+  titleTypes:
+  - handover
+  - alert
+  - report
+  - update
+  - service
+  - token
+  - codec
+  - sync
+  - diagnostic
+  - maintenance
+  - backup
+  - patch
+  titleSuffixes:
+  - '#1842'
+  - '#2156'
+  - '#0094'
+  - '#7721'
+  - '#9383'
+  - .sys
+  - .dll
+  - .exe
+  - _v2
+  - _final
+  - _backup
+  safeSources:
+  - SOC Lead
+  - IT Admin
+  - Security Team
+  - Internal VLAN / CCTV-CORE
+  - Network Operations
+  - System Administrator
+  - DevOps Team
+  - Security Operations Center
+  suspiciousSources:
+  - Unknown sender
+  - External relay
+  - CCTV Server / System32
+  - Unverified domain
+  - External IP / 203.45.67.89
+  - Temporary service account
+  - Expired certificate domain
+  safeCapturedData:
+  - A detailed summary of the incident is recorded in the internal ticket system,
+    number INC-{0}
+  - "Service: cam.sync \u2219 Token age: {0} min \u2219 Policy: SV-12"
+  - "SHA-256: {0} \u2219 Signed: Aegis Systems \u2219 Modified: {1} days ago"
+  - "Scheduled maintenance window \u2219 Approved by IT Ops \u2219 Ticket: MNT-{0}"
+  - "Configuration backup \u2219 Version: {0} \u2219 Verified checksum"
+  - "Service token renewal \u2219 Expiry: {0} hours \u2219 Auto-generated"
+  virusCapturedData:
+  - "SHA-256: {0} \u2219 Signed: Unknown \u2219 Modified: {1} hours ago"
+  - "Executable attachment detected \u2219 Hash unknown \u2219 No signature"
+  - "Service token expired \u2219 Source unverified \u2219 Unusual request pattern"
+  - "Unrecognized binary \u2219 Origin: external relay \u2219 Suspicious behavior"
+  - "Encrypted payload \u2219 No valid certificate \u2219 Unknown protocol"
+  - "Abnormal file size: {0}KB \u2219 Packed executable \u2219 Hidden sections"
+  safeSignals:
+  - Internal domain
+  - Refer to the verifiable ticket
+  - Internal network
+  - In accordance with the Service Policy
+  - Digital signature verified
+  - Sent from a trusted source
+  - The checksum has been verified
+  - Currently undergoing maintenance
+  - Approved by Security Team
+  - Certificate valid and trusted
+  suspiciousSignals:
+  - External domain
+  - No ticket reference.
+  - The source is unclear.
+  - This is inconsistent with the policy
+  - No digital signature
+  - Unusual file extension
+  - Token expired
+  - Unverified sender
+  - Delivery outside of business hours
+  - IP address blacklisted
+  - Abnormal traffic pattern
+  - Certificate expired or invalid
+  - Packed or obfuscated code
+  - Known malware hash pattern
