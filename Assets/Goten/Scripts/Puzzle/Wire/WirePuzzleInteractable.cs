@@ -18,7 +18,7 @@ namespace MGJ
         [SerializeField] private KeyCode exitKey = KeyCode.Escape;
 
         [Header("Player Control")]
-        [SerializeField] private bool disablePlayerMovement = true;
+        [SerializeField] private bool disableCursorLock = true;
         [SerializeField] private bool disableCameraTurn = true;
 
         [Header("Camera Transition")]
@@ -74,7 +74,7 @@ namespace MGJ
             }
             else
             {
-                ExitPuzzle();
+                //ExitPuzzle();
             }
         }
 
@@ -118,11 +118,9 @@ namespace MGJ
                 puzzleUI.SetActive(true);
             }
 
-            // ปิดการเคลื่อนที่ของผู้เล่น (ถ้าต้องการ)
-            if (disablePlayerMovement && PlayerController.Instance != null)
+            if (disableCursorLock && MouseController.Instance != null)
             {
-                // TODO: Disable player movement
-                // PlayerController.Instance.SetMovementEnabled(false);
+                MouseController.Instance.SetLocked(false);
             }
 
             Debug.Log($"[WirePuzzleInteractable] เริ่ม Puzzle: {puzzleName}");
@@ -154,10 +152,9 @@ namespace MGJ
             }
 
             // เปิดการเคลื่อนที่ของผู้เล่น
-            if (disablePlayerMovement && PlayerController.Instance != null)
+            if (disableCursorLock && PlayerController.Instance != null)
             {
-                // TODO: Enable player movement
-                // PlayerController.Instance.SetMovementEnabled(true);
+                MouseController.Instance.SetLocked(true);
             }
 
             Debug.Log($"[WirePuzzleInteractable] ออกจาก Puzzle: {puzzleName}");

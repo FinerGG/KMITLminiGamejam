@@ -166,12 +166,16 @@ namespace MGJ.Puzzle
 
         #region Connection Logic
 
-        public void ConnectTo(WireStretchController targetWire)
+        /// <summary>
+        /// เชื่อมต่อกับสายอื่น
+        /// </summary>
+        /// <returns>true = ต่อถูก, false = ต่อผิด</returns>
+        public bool ConnectTo(WireStretchController targetWire)
         {
             if (targetWire == null)
             {
                 Debug.LogWarning($"[WireController] {gameObject.name}: พยายามเชื่อมต่อกับสายที่เป็น null");
-                return;
+                return false;
             }
 
             // ลากไปยังตำแหน่งของสายเป้าหมาย
@@ -181,23 +185,27 @@ namespace MGJ.Puzzle
             bool isCorrect = (targetWire == correctWire);
 
             // ตั้งสถานะการเชื่อมต่อ
-            SetConnect(isCorrect);
-            targetWire.SetConnect(isCorrect);
+            SetConnect(true);
+            targetWire.SetConnect(true);
 
             lastConnectedWire = targetWire;
 
-            // Update visual feedback
-            UpdateWireColor(isCorrect ? connectedColor : incorrectColor);
-            targetWire.UpdateWireColor(isCorrect ? connectedColor : incorrectColor);
-
+            // 2.1 ถ้าถูกสายไฟ -> เปลี่ยนสีเป็นสีที่ถูก
             if (isCorrect)
             {
+                UpdateWireColor(connectedColor);
+                targetWire.UpdateWireColor(connectedColor);
                 Debug.Log($"[WireController] ✓ เชื่อมต่อถูกต้อง: {gameObject.name} -> {targetWire.gameObject.name}");
             }
+            // 2.2 ถ้าผิดสายไฟ -> เปลี่ยนสีเป็นสีที่ผิด
             else
             {
+                UpdateWireColor(incorrectColor);
+                targetWire.UpdateWireColor(incorrectColor);
                 Debug.Log($"[WireController] ✗ เชื่อมต่อผิด: {gameObject.name} -> {targetWire.gameObject.name}");
             }
+
+            return isCorrect;
         }
 
         public void SetConnect(bool connected)
@@ -207,7 +215,6 @@ namespace MGJ.Puzzle
             if (!connected)
             {
                 lastConnectedWire = null;
-                UpdateWireColor(defaultColor);
             }
         }
 
@@ -216,10 +223,22 @@ namespace MGJ.Puzzle
             if (lastConnectedWire != null)
             {
                 lastConnectedWire.SetConnect(false);
+                lastConnectedWire.ReturnToDefault();
             }
 
             SetConnect(false);
+            ReturnToDefault();
+
             Debug.Log($"[WireController] ตัดการเชื่อมต่อ: {gameObject.name}");
+        }
+
+        /// <summary>
+        /// 1. ถ้ารอบๆไม่มีสายไฟเลย -> กลับไปที่เดิม พร้อมเปลี่ยนสีเป็นสีปกติ
+        /// </summary>
+        public void ReturnToDefault()
+        {
+            SetConnect(false);
+            UpdateWireColor(defaultColor);
         }
 
         #endregion
