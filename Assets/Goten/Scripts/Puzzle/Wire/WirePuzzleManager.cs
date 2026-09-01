@@ -20,7 +20,6 @@ namespace MGJ.Puzzle
         [Header("Interaction Settings")]
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private float snapDistance = 0.15f;
-        [SerializeField] private KeyCode interactKey = KeyCode.E;
 
         [Header("Camera Settings")]
         [SerializeField] private bool useScreenCenter = true;
@@ -96,7 +95,7 @@ namespace MGJ.Puzzle
             {
                 if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance, wireLayer))
                 {
-                    if (Input.GetKeyDown(interactKey) || Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         WireStretchController wire = hit.transform.GetComponentInParent<WireStretchController>();
                         if (wire != null && CanInteractWithWire(wire))
@@ -112,7 +111,7 @@ namespace MGJ.Puzzle
             UpdateWireDrag(ray);
 
             // ปล่อยสาย
-            if (Input.GetKeyUp(interactKey) || Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0))
             {
                 ReleaseWire();
             }
@@ -174,6 +173,8 @@ namespace MGJ.Puzzle
 
             if (!connected)
             {
+                // ไม่มีสายไฟรอบๆ -> กลับไปที่เดิม พร้อมเปลี่ยนสีเป็นสีปกติ
+                currentWire.ReturnToDefault();
                 OnWireDisconnected?.Invoke();
             }
 
@@ -192,19 +193,42 @@ namespace MGJ.Puzzle
             if (targetWires == null)
                 return false;
 
+            // หาสายที่ใกล้ที่สุด
+            WireStretchController closestWire = null;
+            float closestDistance = snapDistance;
+
             foreach (WireStretchController targetWire in targetWires)
             {
                 float distance = (currentWire.Tip.position - targetWire.Tip.position).magnitude;
 
-                if (distance < snapDistance)
+                if (distance < closestDistance)
                 {
-                    currentWire.ConnectTo(targetWire);
-                    OnWireConnected?.Invoke();
-                    Debug.Log($"[WirePuzzle] เชื่อมต่อสาย: {currentWire.name} <-> {targetWire.name}");
-                    return true;
+                    closestDistance = distance;
+                    closestWire = targetWire;
                 }
             }
 
+            // ถ้าพบสายที่ใกล้พอ
+            if (closestWire != null)
+            {
+                // เชื่อมต่อ
+                bool isCorrect = currentWire.ConnectTo(closestWire);
+
+                OnWireConnected?.Invoke();
+
+                if (isCorrect)
+                {
+                    Debug.Log($"[WirePuzzle] ✓ เชื่อมต่อถูกต้อง: {currentWire.name} <-> {closestWire.name}");
+                }
+                else
+                {
+                    Debug.Log($"[WirePuzzle] ✗ เชื่อมต่อผิด: {currentWire.name} <-> {closestWire.name}");
+                }
+
+                return true;
+            }
+
+            // ไม่พบสายรอบๆ
             return false;
         }
 
