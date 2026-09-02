@@ -31,7 +31,8 @@ namespace MGJ.Puzzle
 
         public Transform Tip => wireTip;
         public bool IsConnect => isConnected;
-        public bool IsCorrectConnection => isConnected && lastConnectedWire == correctWire;
+        public bool IsCorrectConnection => isConnected && lastConnectedWire != null &&
+            (lastConnectedWire == correctWire || lastConnectedWire.correctWire == this);
 
         // Private variables
         private Vector3 targetWorldPos;
@@ -94,13 +95,19 @@ namespace MGJ.Puzzle
 
         public void DragTo(Vector3 worldPos)
         {
-            // ถ้าลากสายที่เชื่อมต่ออยู่ ให้ตัดการเชื่อมต่อ
-            if (isConnected)
-            {
-                Disconnect();
-            }
-
             targetWorldPos = worldPos;
+            isDragging = true;
+        }
+
+        /// <summary>
+        /// เริ่มลากสายจาก input จริง ตัดคู่เดิมเพียงครั้งเดียว
+        /// (DragTo ถูกเรียกทุกเฟรม จึงไม่ควรตัดการเชื่อมต่อในเมธอดนั้น)
+        /// </summary>
+        public void BeginDrag()
+        {
+            if (isConnected)
+                Disconnect();
+
             isDragging = true;
         }
 
@@ -172,23 +179,30 @@ namespace MGJ.Puzzle
         /// <returns>true = ต่อถูก, false = ต่อผิด</returns>
         public bool ConnectTo(WireStretchController targetWire)
         {
-            if (targetWire == null)
+            if (targetWire == null || targetWire == this)
             {
                 Debug.LogWarning($"[WireController] {gameObject.name}: พยายามเชื่อมต่อกับสายที่เป็น null");
                 return false;
             }
 
+            // หนึ่งปลายต่อได้เพียงหนึ่งคู่ ปลดคู่เดิมของทั้งสองฝั่งก่อน
+            if (isConnected)
+                Disconnect();
+            if (targetWire.isConnected)
+                targetWire.Disconnect();
+
             // ลากไปยังตำแหน่งของสายเป้าหมาย
             DragTo(targetWire.transform.position);
 
             // เช็คว่าต่อถูกหรือไม่
-            bool isCorrect = (targetWire == correctWire);
+            bool isCorrect = targetWire == correctWire || targetWire.correctWire == this;
 
             // ตั้งสถานะการเชื่อมต่อ
             SetConnect(true);
             targetWire.SetConnect(true);
 
             lastConnectedWire = targetWire;
+            targetWire.lastConnectedWire = this;
 
             // 2.1 ถ้าถูกสายไฟ -> เปลี่ยนสีเป็นสีที่ถูก
             if (isCorrect)
@@ -220,13 +234,16 @@ namespace MGJ.Puzzle
 
         public void Disconnect()
         {
-            if (lastConnectedWire != null)
+            WireStretchController partner = lastConnectedWire;
+
+            // ล้างสถานะทั้งคู่ก่อนเรียกคืนสภาพ เพื่อป้องกันการเรียกซ้ำ
+            SetConnect(false);
+            if (partner != null && partner.lastConnectedWire == this)
             {
-                lastConnectedWire.SetConnect(false);
-                lastConnectedWire.ReturnToDefault();
+                partner.SetConnect(false);
+                partner.UpdateWireColor(partner.defaultColor);
             }
 
-            SetConnect(false);
             ReturnToDefault();
 
             Debug.Log($"[WireController] ตัดการเชื่อมต่อ: {gameObject.name}");
@@ -275,6 +292,15 @@ namespace MGJ.Puzzle
         {
             defaultColor = color;
             UpdateWireColor(color);
+        }
+
+        /// <summary>
+        /// อัปเดตจุดพักหลังจากมีการย้ายตำแหน่งสายโดยระบบสุ่ม
+        /// </summary>
+        public void RefreshRestPosition()
+        {
+            if (wireTip != null)
+                tipStartPos = wireTip.position;
         }
 
         public Color GetDefaultColor()
