@@ -54,6 +54,9 @@ namespace MGJ.Puzzle
         private WireStretchController currentWire;
         private bool isLeftWire = false;
         private bool isRightWire = false;
+        private Plane dragPlane;
+        private Vector3 lastDragWorldPosition;
+        private bool hasDragWorldPosition;
 
         private void Awake()
         {
@@ -80,7 +83,7 @@ namespace MGJ.Puzzle
 
         private void Update()
         {
-            if (!isActive || isSolved || CameraController.Instance.Camera == null)
+            if (!isActive || isSolved || CameraController.Instance == null || CameraController.Instance.Camera == null)
                 return;
 
             HandleWireInteraction();
@@ -93,15 +96,12 @@ namespace MGJ.Puzzle
             // ถ้ายังไม่ได้จับสายไว้
             if (currentWire == null)
             {
-                if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance, wireLayer))
+                WireStretchController wire = FindWireUnderRay(ray);
+                if (wire != null)
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
-                        WireStretchController wire = hit.transform.GetComponentInParent<WireStretchController>();
-                        if (wire != null && CanInteractWithWire(wire))
-                        {
-                            StartDraggingWire(wire);
-                        }
+                        StartDraggingWire(wire);
                     }
                 }
                 return;
@@ -113,13 +113,15 @@ namespace MGJ.Puzzle
             // ปล่อยสาย
             if (Input.GetMouseButtonUp(0))
             {
-                ReleaseWire();
+                ReleaseWire(ray);
             }
         }
 
         private Ray GetInteractionRay()
         {
-            if (useScreenCenter)
+            // ใช้จุดกลางเฉพาะตอนล็อกเมาส์ (เช่น controller/crosshair)
+            // เมื่อปลดล็อกเมาส์ใน puzzle ให้ ray ตามตำแหน่ง cursor จริงเสมอ
+            if (useScreenCenter && Cursor.lockState == CursorLockMode.Locked)
             {
                 Vector3 screenPoint = new Vector3(
                     Screen.width * screenCenterOffset.x,
@@ -145,23 +147,25 @@ namespace MGJ.Puzzle
             currentWire = wire;
             isLeftWire = leftWires.Contains(wire);
             isRightWire = rightWires.Contains(wire);
+            dragPlane = new Plane(Vector3.right, wire.transform.position);
+            hasDragWorldPosition = false;
+            wire.BeginDrag();
 
             Debug.Log($"[WirePuzzle] เริ่มลากสาย: {wire.name}");
         }
 
         private void UpdateWireDrag(Ray ray)
         {
-            // สร้าง Plane ตั้งฉากกับแกน X ผ่านตำแหน่งของสาย
-            Plane plane = new Plane(Vector3.right, currentWire.transform.position);
-
-            if (plane.Raycast(ray, out float enter))
+            if (dragPlane.Raycast(ray, out float enter) && enter >= 0f)
             {
                 Vector3 worldPos = ray.GetPoint(enter);
+                lastDragWorldPosition = worldPos;
+                hasDragWorldPosition = true;
                 currentWire.DragTo(worldPos);
             }
         }
 
-        private void ReleaseWire()
+        private void ReleaseWire(Ray releaseRay)
         {
             if (currentWire == null)
                 return;
@@ -169,7 +173,7 @@ namespace MGJ.Puzzle
             currentWire.Release();
 
             // ลองเชื่อมต่อกับสายอีกฝั่ง
-            bool connected = TryConnectWire();
+            bool connected = TryConnectWire(releaseRay);
 
             if (!connected)
             {
@@ -184,46 +188,51 @@ namespace MGJ.Puzzle
             currentWire = null;
             isLeftWire = false;
             isRightWire = false;
+            hasDragWorldPosition = false;
         }
 
-        private bool TryConnectWire()
+        private bool TryConnectWire(Ray releaseRay)
         {
             List<WireStretchController> targetWires = isLeftWire ? rightWires : (isRightWire ? leftWires : null);
 
             if (targetWires == null)
                 return false;
 
-            // หาสายที่ใกล้ที่สุด
-            WireStretchController closestWire = null;
-            float closestDistance = snapDistance;
+            // เลือกสายที่ ray ชี้โดนก่อน ระยะ world-space อย่างเดียวไม่เสถียร
+            WireStretchController closestWire = FindTargetUnderRay(releaseRay, targetWires);
 
-            foreach (WireStretchController targetWire in targetWires)
+            // ถ้าไม่มี collider ที่ ray โดน ให้ใช้ตำแหน่งปล่อยล่าสุดเป็น fallback
+            // เพื่อไม่ใช้ Tip ที่ animation ยังอัปเดตไม่ทันในเฟรมปล่อย
+            if (closestWire == null)
             {
-                float distance = (currentWire.Tip.position - targetWire.Tip.position).magnitude;
+                Vector3 releasePosition = hasDragWorldPosition
+                    ? lastDragWorldPosition
+                    : currentWire.Tip.position;
+                float closestDistanceSqr = snapDistance * snapDistance;
 
-                if (distance < closestDistance)
+                foreach (WireStretchController targetWire in targetWires)
                 {
-                    closestDistance = distance;
-                    closestWire = targetWire;
+                    if (targetWire == null || targetWire == currentWire)
+                        continue;
+
+                    float distanceSqr = (targetWire.Tip.position - releasePosition).sqrMagnitude;
+                    if (distanceSqr <= closestDistanceSqr)
+                    {
+                        closestDistanceSqr = distanceSqr;
+                        closestWire = targetWire;
+                    }
                 }
             }
 
             // ถ้าพบสายที่ใกล้พอ
             if (closestWire != null)
             {
-                // เชื่อมต่อ
                 bool isCorrect = currentWire.ConnectTo(closestWire);
-
                 OnWireConnected?.Invoke();
 
-                if (isCorrect)
-                {
-                    Debug.Log($"[WirePuzzle] ✓ เชื่อมต่อถูกต้อง: {currentWire.name} <-> {closestWire.name}");
-                }
-                else
-                {
-                    Debug.Log($"[WirePuzzle] ✗ เชื่อมต่อผิด: {currentWire.name} <-> {closestWire.name}");
-                }
+                Debug.Log(isCorrect
+                    ? $"[WirePuzzle] ✓ เชื่อมต่อถูกต้อง: {currentWire.name} <-> {closestWire.name}"
+                    : $"[WirePuzzle] ✗ เชื่อมต่อผิด: {currentWire.name} <-> {closestWire.name}");
 
                 return true;
             }
@@ -232,15 +241,48 @@ namespace MGJ.Puzzle
             return false;
         }
 
+        private WireStretchController FindTargetUnderRay(Ray ray, List<WireStretchController> targetWires)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(ray, interactionDistance, wireLayer, QueryTriggerInteraction.Collide);
+            if (hits == null || hits.Length == 0)
+                return null;
+
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            foreach (RaycastHit hit in hits)
+            {
+                WireStretchController candidate = hit.transform.GetComponentInParent<WireStretchController>();
+                if (candidate != null && candidate != currentWire && targetWires.Contains(candidate))
+                    return candidate;
+            }
+
+            return null;
+        }
+
+        private WireStretchController FindWireUnderRay(Ray ray)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(ray, interactionDistance, wireLayer, QueryTriggerInteraction.Collide);
+            if (hits == null || hits.Length == 0)
+                return null;
+
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+            foreach (RaycastHit hit in hits)
+            {
+                WireStretchController candidate = hit.transform.GetComponentInParent<WireStretchController>();
+                if (candidate != null && CanInteractWithWire(candidate))
+                    return candidate;
+            }
+
+            return null;
+        }
+
         private void CheckPuzzleSolved()
         {
             if (isSolved)
                 return;
 
-            int leftConnected = leftWires.Count(wire => wire.IsConnect);
-            int rightConnected = rightWires.Count(wire => wire.IsConnect);
-
-            bool allConnected = (leftConnected == leftWires.Count) && (rightConnected == rightWires.Count);
+            bool allConnected = leftWires.Count > 0 && rightWires.Count == leftWires.Count &&
+                leftWires.All(wire => wire != null && wire.IsCorrectConnection);
 
             if (allConnected)
             {
@@ -283,13 +325,20 @@ namespace MGJ.Puzzle
             currentWire = null;
             isLeftWire = false;
             isRightWire = false;
+            hasDragWorldPosition = false;
 
             // รีเซ็ตสายทั้งหมด
             foreach (var wire in leftWires)
-                wire.SetConnect(false);
+            {
+                wire.Disconnect();
+                wire.ReturnToDefault();
+            }
 
             foreach (var wire in rightWires)
-                wire.SetConnect(false);
+            {
+                wire.Disconnect();
+                wire.ReturnToDefault();
+            }
 
             // สุ่มใหม่
             if (randomizeOnStart)
@@ -365,6 +414,13 @@ namespace MGJ.Puzzle
             {
                 rightWires[i].transform.position = rightPositions[i];
             }
+
+            // WireStretchController บันทึกจุดพักใน Awake ก่อนการสุ่มตำแหน่ง
+            // จึงต้องอัปเดต endpoint หลังย้ายตำแหน่งเสร็จ
+            foreach (WireStretchController wire in leftWires)
+                wire.RefreshRestPosition();
+            foreach (WireStretchController wire in rightWires)
+                wire.RefreshRestPosition();
         }
 
         /// <summary>
@@ -460,7 +516,7 @@ namespace MGJ.Puzzle
             }
 
             // แสดงรัศมีการ interact
-            if (CameraController.Instance.Camera != null && useScreenCenter)
+            if (CameraController.Instance != null && CameraController.Instance.Camera != null && useScreenCenter)
             {
                 Ray ray = GetInteractionRay();
                 Gizmos.color = Color.cyan;
