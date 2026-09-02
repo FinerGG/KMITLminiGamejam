@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 namespace MGJ
 {
@@ -11,11 +12,17 @@ namespace MGJ
         [SerializeField] private TextMeshProUGUI cameraLabel;
 
         [Header("Camera Selector")]
-        [SerializeField] private Button[] cameraButtons; // 4 ����
+        [SerializeField] private Button[] cameraButtons; // 4 ปุ่ม
+
+        [Header("Enemy Detection")]
+        [SerializeField] private float detectionRange = 10f;
+        [SerializeField] private float detectionAngle = 60f;
+        [SerializeField] private LayerMask enemyLayer;
 
         private Camera[] cameras;
         private RenderTexture[] renderTextures;
         private int currentCameraIndex = 0;
+        private List<EnemyAI> detectedEnemies = new List<EnemyAI>();
 
         public void Initialize(Camera[] cctvCameras)
         {
@@ -26,7 +33,7 @@ namespace MGJ
                 cam.enabled = true;
             }
 
-            // ���ҧ RenderTexture ����Ѻ���С��ͧ
+            // สร้าง RenderTexture สำหรับแต่ละกล้อง
             renderTextures = new RenderTexture[cameras.Length];
             for (int i = 0; i < cameras.Length; i++)
             {
@@ -34,7 +41,7 @@ namespace MGJ
                 cameras[i].targetTexture = renderTextures[i];
             }
 
-            // Setup ������Ѻ���ͧ
+            // Setup ปุ่มสำหรับกล้อง
             for (int i = 0; i < cameraButtons.Length && i < cameras.Length; i++)
             {
                 int index = i; // Capture for closure
@@ -42,8 +49,14 @@ namespace MGJ
                 cameraButtons[i].onClick.AddListener(() => SwitchCamera(index));
             }
 
-            // �ʴ����ͧ�á
+            // แสดงกล้องแรก
             SwitchCamera(0);
+        }
+
+        private void Update()
+        {
+            // เช็คว่ามี Enemy ในมุมมองหรือไม่
+            CheckEnemiesInView();
         }
 
         public void SwitchCamera(int index)
@@ -52,13 +65,13 @@ namespace MGJ
 
             currentCameraIndex = index;
 
-            // ����¹ display
+            // ����¹ display
             cameraDisplay.texture = renderTextures[index];
 
-            // �ѻവ label
+            // �ѻവ label
             cameraLabel.text = $"Camera {index + 1}";
 
-            // Highlight ����������͡
+            // Highlight ����������͡
             for (int i = 0; i < cameraButtons.Length; i++)
             {
                 ColorBlock colors = cameraButtons[i].colors;
@@ -71,12 +84,15 @@ namespace MGJ
         {
             base.OnClose();
 
+            // ปิด Enemy detection
+            ClearEnemyDetection();
+
             foreach (var cam in cameras)
             {
                 cam.enabled = false;
             }
 
-            // �Ӥ������Ҵ RenderTexture
+            // ทำความสะอาด RenderTexture
             if (renderTextures != null)
             {
                 foreach (var rt in renderTextures)
@@ -85,5 +101,66 @@ namespace MGJ
                 }
             }
         }
+
+        #region Enemy Detection
+
+        /// <summary>
+        /// เช็คว่ามี Enemy ในมุมมองหรือไม่
+        /// </summary>
+        private void CheckEnemiesInView()
+        {
+            if (cameras == null || currentCameraIndex >= cameras.Length)
+                return;
+
+            Camera currentCam = cameras[currentCameraIndex];
+            if (currentCam == null)
+                return;
+
+            // หา Enemy ทั้งหมดในรัศมี
+            Collider[] colliders = Physics.OverlapSphere(
+                currentCam.transform.position,
+                detectionRange,
+                enemyLayer
+            );
+
+            // ล้างรายการเดิม
+            ClearEnemyDetection();
+
+            foreach (var col in colliders)
+            {
+                EnemyAI enemy = col.GetComponent<EnemyAI>();
+                if (enemy == null)
+                    continue;
+
+                // เช็คว่าอยู่ในมุมมองหรือไม่
+                Vector3 dirToEnemy = enemy.transform.position - currentCam.transform.position;
+                float angle = Vector3.Angle(currentCam.transform.forward, dirToEnemy);
+
+                if (angle < detectionAngle * 0.5f)
+                {
+                    // อยู่ในมุมมอง → ตั้งค่า Enemy ว่ากำลังถูกมอง
+                    enemy.SetBeingWatched(true);
+                    detectedEnemies.Add(enemy);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ปิด Enemy detection ทั้งหมด
+        /// </summary>
+        private void ClearEnemyDetection()
+        {
+            foreach (var enemy in detectedEnemies)
+            {
+                if (enemy != null)
+                {
+                    enemy.SetBeingWatched(false);
+                }
+            }
+
+            detectedEnemies.Clear();
+        }
+
+        #endregion
     }
 }

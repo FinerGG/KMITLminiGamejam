@@ -6,7 +6,7 @@ namespace MGJ
     {
         protected bool interact = false;
         protected bool active = true;
-        public void Click() => interact = true;
+        public virtual void Click() => interact = true;
         public void setActive(bool act) => active = act;
     }
 }

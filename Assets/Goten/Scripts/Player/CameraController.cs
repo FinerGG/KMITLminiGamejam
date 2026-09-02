@@ -13,6 +13,7 @@ namespace MGJ
         [SerializeField] private float mouseSensitivity = 120f;
         [SerializeField] private float minPitch = -85f;
         [SerializeField] private float maxPitch = 85f;
+        [SerializeField] private float defaultYawLimit = 0f; // จำกัดการหันซ้าย-ขวาของกล้องอิสระ (0 = หมุนได้รอบตัว)
 
         [Header("Fov")]
         [SerializeField] private bool enableFovKick = true;
@@ -31,6 +32,9 @@ namespace MGJ
         private Vector3 _cameraOriginalPosition;
         private Quaternion _cameraOriginalRotation;
         private float _pitch;
+        private float _yaw;
+        private float _yawLimit;
+        private bool _cameraFollowsPlayer;
         private bool _cameraTurnEnable = true;
         private Coroutine _cameraTransition;
 
@@ -132,6 +136,13 @@ namespace MGJ
 
             _cameraOriginalPosition = newCamera.transform.localPosition;
             _cameraOriginalRotation = newCamera.transform.localRotation;
+
+            // กล้องที่เป็นลูกของ player จะได้ yaw จากการหมุนตัว player อยู่แล้ว
+            // กล้องอิสระ (เช่นกล้องประตู) ต้องเก็บ yaw ไว้บนตัวกล้องเอง
+            _cameraFollowsPlayer = playerTransform != null && newCamera.transform.IsChildOf(playerTransform);
+
+            _pitch = 0f;
+            _yaw = 0f;
         }
 
         private System.Collections.IEnumerator SmoothSetCamera(Camera newCamera, float duration)
@@ -168,6 +179,7 @@ namespace MGJ
             SetCamera(startCamera);
             _offsetRotAxes = Vector3.zero;
             _cameraTurnEnable = true;
+            _yawLimit = defaultYawLimit;
         }
 
         public void SetCameraTurnEnable(bool turnEnable)
@@ -182,6 +194,18 @@ namespace MGJ
             _pitch = 0f;
         }
 
+        /// <summary>
+        /// เปิด mouse look พร้อมจำกัดการหันซ้าย-ขวาของกล้องอิสระ
+        /// yawLimit เป็นองศาจากมุมตั้งต้นของกล้อง (0 = หมุนได้รอบตัว)
+        /// </summary>
+        public void SetCameraTurnEnable(bool turnEnable, float yawLimit)
+        {
+            SetCameraTurnEnable(turnEnable);
+            _yawLimit = Mathf.Max(0f, yawLimit);
+            _pitch = 0f;
+            _yaw = 0f;
+        }
+
         private void HandleMouseLook()
         {
             if (!_cameraTurnEnable)
@@ -190,8 +214,18 @@ namespace MGJ
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-            if (playerTransform != null)
-                playerTransform.Rotate(Vector3.up * mouseX);
+            if (_cameraFollowsPlayer)
+            {
+                if (playerTransform != null)
+                    playerTransform.Rotate(Vector3.up * mouseX);
+            }
+            else
+            {
+                _yaw += mouseX;
+
+                if (_yawLimit > 0f)
+                    _yaw = Mathf.Clamp(_yaw, -_yawLimit, _yawLimit);
+            }
 
             _pitch -= mouseY;
             _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
@@ -224,11 +258,15 @@ namespace MGJ
             //base + shake
             _camera.transform.localPosition = _cameraOriginalPosition + _shakePosOffset;
 
-            //pitch + shakeRotation
-            Quaternion baseRot = Quaternion.Euler(_pitch, 0f, 0f);
+            //pitch + yaw + shakeRotation
+            Quaternion baseRot = Quaternion.Euler(_pitch, _yaw, 0f);
             Quaternion shakeRot = Quaternion.Euler(_shakeRotOffset);
             Quaternion offsetRot = Quaternion.Euler(_offsetRotAxes);
-            _camera.transform.localRotation = baseRot * shakeRot * offsetRot;
+
+            // กล้องอิสระเริ่มหันจากมุมที่จัดไว้ใน Scene แล้วค่อยบวก mouse look
+            Quaternion restRot = _cameraFollowsPlayer ? Quaternion.identity : _cameraOriginalRotation;
+
+            _camera.transform.localRotation = restRot * baseRot * shakeRot * offsetRot;
         }
 
         /// <summary>
