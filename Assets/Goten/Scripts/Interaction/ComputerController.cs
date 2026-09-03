@@ -10,6 +10,9 @@ namespace MGJ
         [SerializeField] private Camera _computerCamera;
         [SerializeField] private GameObject _appsFrame;
 
+        [Header("Raycast")]
+        [SerializeField] private LayerMask appLayer;
+
         private bool _connected = false;
         private void Start()
         {
@@ -54,7 +57,7 @@ namespace MGJ
                     Ray ray = _computerCamera.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
 
-                    if (Physics.Raycast(ray, out hit, 100f, 1 << 7)) // Layer 7
+                    if (Physics.Raycast(ray, out hit, 100f, appLayer))
                     {
                         Button button = hit.collider.GetComponent<Button>();
                         if (button != null && button.interactable)
