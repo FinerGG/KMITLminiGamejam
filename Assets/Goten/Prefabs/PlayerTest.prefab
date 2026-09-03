@@ -154,7 +154,7 @@ MonoBehaviour:
   maxDistance: 100
   raycastMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 512
 --- !u!114 &3612403134298346996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 8947774238151134274}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -217,7 +217,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856721439021101861}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -365,6 +365,7 @@ MonoBehaviour:
   mouseSensitivity: 120
   minPitch: -85
   maxPitch: 85
+  defaultYawLimit: 0
   enableFovKick: 1
   baseFov: 70
   fovSmooth: 10

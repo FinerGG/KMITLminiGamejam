@@ -80,8 +80,8 @@ MonoBehaviour:
   wireMesh: {fileID: 5661591731661805827}
   wireTip: {fileID: 4969854942501799356}
   correctWire: {fileID: 7139051782407260917}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.13948512, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0.037985973, b: 0, a: 1}
@@ -115,7 +115,7 @@ Transform:
   m_GameObject: {fileID: 274617345217235102}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1.432, y: 4.831, z: -0.072}
+  m_LocalPosition: {x: -1.444, y: 4.855, z: -0.072}
   m_LocalScale: {x: 2.4688294, y: 2.4688296, z: 2.4688296}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -561,8 +561,8 @@ MonoBehaviour:
   wireMesh: {fileID: 56239418927393083}
   wireTip: {fileID: 1947481957146819935}
   correctWire: {fileID: 8494842166897071777}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0, g: 1, b: 0.011367798, a: 1}
   incorrectColor: {r: 1, g: 0, b: 0, a: 1}
@@ -599,7 +599,7 @@ Transform:
   m_GameObject: {fileID: 1784648693411079916}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0041, z: 0}
   m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -720,7 +720,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2519720233034850532}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -844,7 +844,7 @@ Transform:
   m_GameObject: {fileID: 2742326161178874762}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.011, z: 0}
   m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -973,8 +973,8 @@ MonoBehaviour:
   wireMesh: {fileID: 614767366454848020}
   wireTip: {fileID: 1526898321646442225}
   correctWire: {fileID: 2476157465025558599}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1202,8 +1202,8 @@ MonoBehaviour:
   wireMesh: {fileID: 6630287130826662288}
   wireTip: {fileID: 7259237032017574662}
   correctWire: {fileID: 1612734600948990171}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.089953184, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0.009601215, b: 0, a: 1}
@@ -1237,7 +1237,7 @@ Transform:
   m_GameObject: {fileID: 4605943950856393696}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -1.406, y: 4.976, z: 0.423}
+  m_LocalPosition: {x: -1.44, y: 5, z: 0.408}
   m_LocalScale: {x: 2.4688294, y: 2.4688296, z: 2.4688296}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1275,7 +1275,7 @@ Transform:
   m_GameObject: {fileID: 5328843755452094546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.022, z: 0}
   m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1404,8 +1404,8 @@ MonoBehaviour:
   wireMesh: {fileID: 3181616342180679543}
   wireTip: {fileID: 951770384694175437}
   correctWire: {fileID: 6272311801604199978}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1556,8 +1556,8 @@ MonoBehaviour:
   wireMesh: {fileID: 1841981751978462805}
   wireTip: {fileID: 3362814117996502263}
   correctWire: {fileID: 4749341391311678897}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.16316223, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0.06914881, b: 0, a: 1}
@@ -1615,8 +1615,8 @@ MonoBehaviour:
   wireMesh: {fileID: 5898513714356554175}
   wireTip: {fileID: 1379600933758817192}
   correctWire: {fileID: 8272332762970376371}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1813,8 +1813,8 @@ MonoBehaviour:
   wireMesh: {fileID: 3230061712009121914}
   wireTip: {fileID: 7153586436487581446}
   correctWire: {fileID: 4149361617736975111}
-  minLength: 0.1
-  maxLength: 1
+  minLength: 0.05
+  maxLength: 10
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0, g: 1, b: 0, a: 1}
   incorrectColor: {r: 1, g: 0, b: 0, a: 1}
@@ -1853,7 +1853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.388
+      value: 4.51
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1895,6 +1895,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ServerPuzzle
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1914,6 +1918,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1874172983330449995}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8436999304755207745}
   m_SourcePrefab: {fileID: 100100000, guid: 40883ad11614f6c42a0a284babc17cb1, type: 3}
 --- !u!4 &2846321692179881768 stripped
 Transform:
@@ -1941,7 +1948,7 @@ MonoBehaviour:
   puzzleCamera: {fileID: 8426756028815681676}
   puzzleName: Wire Connection Puzzle
   exitKey: 27
-  disablePlayerMovement: 1
+  disableCursorLock: 1
   disableCameraTurn: 1
   transitionDuration: 0.5
   puzzleUI: {fileID: 0}
@@ -1970,10 +1977,9 @@ MonoBehaviour:
   wireLayer:
     serializedVersion: 2
     m_Bits: 64
-  interactionDistance: 3
+  interactionDistance: 100
   snapDistance: 0.15
-  interactKey: 101
-  useScreenCenter: 1
+  useScreenCenter: 0
   screenCenterOffset: {x: 0.5, y: 0.5}
   startActive: 0
   lockOnSolve: 1
@@ -1997,3 +2003,24 @@ MonoBehaviour:
   OnWireDisconnected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!65 &8436999304755207745
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3227949343032903058}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.2685912, y: 7.2798057, z: 3.4947526}
+  m_Center: {x: 0.12020061, y: 3.1399026, z: 0.015584168}

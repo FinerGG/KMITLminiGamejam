@@ -14,12 +14,14 @@ namespace MGJ
     public class EnemyAI : MonoBehaviour
     {
         [Header("Waypoints")]
-        [SerializeField] private List<Transform> waypoints = new List<Transform>(); // Pattern: Start → 1 → 2 → 3 → Door
+        [SerializeField] private Transform startWaypoint; // จุดเริ่มต้น (แยกจาก waypoints list)
+        [SerializeField] private List<Transform> waypoints = new List<Transform>(); // Pattern: 1 → 2 → 3 → Door (ไม่รวม Start)
         [SerializeField] private int currentWaypointIndex = 0;
 
         [Header("Movement Settings")]
-        [SerializeField] private float moveInterval = 10f; // ระยะเวลาระหว่างการพยายามเคลื่อนที่ (วินาทีจริง)
+        [SerializeField] private float moveInterval = 5f; // ระยะเวลาระหว่างการพยายามเคลื่อนที่ (วินาทีจริง)
         [SerializeField] private float moveIntervalRandomness = 2f; // ความสุ่มของ interval
+        [SerializeField] private float movementChanceMultiplier = 1f; // คูณกับ TimeManager.GetEnemyActivityChance()
 
         [Header("State")]
         [SerializeField] private bool isBeingWatched = false; // ถูกมองผ่านกล้องหรือไม่
@@ -37,7 +39,7 @@ namespace MGJ
         public bool IsAtDoor => isAtDoor;
         public bool IsBeingWatched => isBeingWatched;
         public int CurrentWaypointIndex => currentWaypointIndex;
-        public Transform CurrentWaypoint => currentWaypointIndex < waypoints.Count ? waypoints[currentWaypointIndex] : null;
+        public Transform CurrentWaypoint => currentWaypointIndex < waypoints.Count ? waypoints[currentWaypointIndex] : startWaypoint;
 
         private void Start()
         {
@@ -77,8 +79,8 @@ namespace MGJ
                 return;
             }
 
-            // สุ่มว่าจะเคลื่อนที่หรือไม่ (ตาม TimeManager)
-            float activityChance = TimeManager.Instance.GetEnemyActivityChance();
+            // สุ่มว่าจะเคลื่อนที่หรือไม่ (ตาม TimeManager * Multiplier)
+            float activityChance = TimeManager.Instance.GetEnemyActivityChance() * movementChanceMultiplier;
             float roll = Random.value;
 
             if (roll <= activityChance)
@@ -125,10 +127,10 @@ namespace MGJ
             isBeingWatched = false;
             moveTimer = 0f;
 
-            if (waypoints.Count > 0)
+            if (startWaypoint != null)
             {
-                transform.position = waypoints[0].position;
-                transform.rotation = waypoints[0].rotation;
+                transform.position = startWaypoint.position;
+                transform.rotation = startWaypoint.rotation;
             }
 
             OnReset?.Invoke();

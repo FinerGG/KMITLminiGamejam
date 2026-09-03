@@ -328,6 +328,11 @@ MonoBehaviour:
   - {fileID: 2100265867618876260}
   - {fileID: 6723617291230569572}
   - {fileID: 2800545323088438383}
+  detectionRange: 10
+  detectionAngle: 60
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1722036381047392215
 GameObject:
   m_ObjectHideFlags: 0
