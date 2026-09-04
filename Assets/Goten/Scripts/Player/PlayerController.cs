@@ -49,12 +49,6 @@ namespace MGJ
                 playerTransform.position = initialPosition;
                 playerTransform.rotation = initialRotation;
 
-                // รีเซ็ตการหมุนของกล้อง (ถ้ามี CameraController)
-                if (CameraController.Instance != null)
-                {
-                    CameraController.Instance.ResetRotation();
-                }
-
                 Debug.Log($"[PlayerController] รีเซ็ตผู้เล่นไปตำแหน่ง: {initialPosition}");
             }
         }
