@@ -22,6 +22,12 @@ namespace MGJ
         [SerializeField] private bool isAtDoor = false; // อยู่ที่ประตูหรือยัง
         [SerializeField] private bool isActive = false; // เริ่มเคลื่อนที่แล้วหรือยัง
 
+        [Header("Jumpscare")]
+        [SerializeField] private GameObject jumpscareCanvas;
+        [SerializeField] private float jumpscareDelay = 10f;
+        [SerializeField] private float mainMenuDelay = 5f;
+        [SerializeField] private string mainMenuSceneName = "MainMenu";
+
         [Header("Events")]
         public UnityEvent OnMove; // เรียกเมื่อเคลื่อนที่
         public UnityEvent OnReachDoor; // เรียกเมื่อถึงประตู
@@ -29,6 +35,7 @@ namespace MGJ
 
         private float moveTimer = 0f;
         private float nextMoveTime = 0f;
+        private Coroutine jumpscareCoroutine;
 
         public bool IsAtDoor => isAtDoor;
         public bool IsBeingWatched => isBeingWatched;
@@ -97,6 +104,7 @@ namespace MGJ
             {
                 // ถึงประตูแล้ว
                 isAtDoor = true;
+                jumpscareCoroutine = StartCoroutine(HandleDoorJumpscare());
                 OnReachDoor?.Invoke();
                 Debug.Log($"[EnemyAI] {gameObject.name} ถึงประตูแล้ว!");
                 return;
@@ -116,10 +124,19 @@ namespace MGJ
         /// </summary>
         public void ResetToStart()
         {
+            if (jumpscareCoroutine != null)
+            {
+                StopCoroutine(jumpscareCoroutine);
+                jumpscareCoroutine = null;
+            }
+
             currentWaypointIndex = 0;
             isAtDoor = false;
             isBeingWatched = false;
             moveTimer = 0f;
+
+            if (jumpscareCanvas != null)
+                jumpscareCanvas.SetActive(false);
 
             if (startWaypoint != null)
             {
@@ -129,6 +146,23 @@ namespace MGJ
 
             OnReset?.Invoke();
             Debug.Log($"[EnemyAI] {gameObject.name} กลับไปจุดเริ่มต้น");
+        }
+
+        private IEnumerator HandleDoorJumpscare()
+        {
+            yield return new WaitForSeconds(jumpscareDelay);
+
+            if (jumpscareCanvas != null)
+                jumpscareCanvas.SetActive(true);
+
+            yield return new WaitForSeconds(mainMenuDelay);
+
+            if (SceneController.Instance != null)
+                SceneController.Instance.LoadScene(mainMenuSceneName);
+            else
+                UnityEngine.SceneManagement.SceneManager.LoadScene(mainMenuSceneName);
+
+            jumpscareCoroutine = null;
         }
 
         #endregion
