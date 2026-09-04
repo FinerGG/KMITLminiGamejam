@@ -162,10 +162,15 @@ namespace MGJ
 
             yield return new WaitForSeconds(mainMenuDelay);
 
-            if (SceneController.Instance != null)
-                SceneController.Instance.LoadScene(mainMenuSceneName);
+            // ปิด jumpscare canvas
+            if (jumpscareCanvas != null)
+                jumpscareCanvas.SetActive(false);
+
+            // เรียก GameStateManager แทนการโหลด Scene
+            if (GameStateManager.Instance != null)
+                GameStateManager.Instance.PlayerDied();
             else
-                UnityEngine.SceneManagement.SceneManager.LoadScene(mainMenuSceneName);
+                Debug.LogWarning("[EnemyAI] ไม่พบ GameStateManager!");
 
             jumpscareCoroutine = null;
         }
