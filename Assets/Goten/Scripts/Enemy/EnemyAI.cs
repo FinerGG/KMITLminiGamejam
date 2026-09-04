@@ -50,6 +50,11 @@ namespace MGJ
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                WarpToNextWaypoint();
+            }
+
             if (!GameStateManager.Instance.IsPlaying())
                 return;
 

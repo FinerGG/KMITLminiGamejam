@@ -587,6 +587,8 @@ MonoBehaviour:
   emailConfig: {fileID: 11400000, guid: fbd0530b5026f6141a4dc2b6026b6c48, type: 2}
   emailSpawnInterval: 10
   virusProbability: 0.5
+  noiceImage: {fileID: 479713871831795307}
+  noiceDisplayDuration: 1
   networkApp: {fileID: 0}
 --- !u!1 &5112057241256291402
 GameObject:
