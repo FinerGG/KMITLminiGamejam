@@ -12,6 +12,8 @@ namespace MGJ
         [Header("Loading Settings")]
         [SerializeField] private int objectsPerFrame = 10; // จำนวน object ที่โหลดต่อ frame
         [SerializeField] private bool useProgressiveLoading = true;
+        [SerializeField] private bool useBlinkEffect = true; // ใช้เอฟเฟกต์กระพริบตา
+        [SerializeField] private float blinkDuration = 0.4f; // ระยะเวลากระพริบ
         [SerializeField] private List<GameObject> environments = new List<GameObject>();
         [SerializeField] private int currentEnvironmentIndex = 0;
         [SerializeField] private bool randomOrder = false;
@@ -58,6 +60,33 @@ namespace MGJ
                 yield break;
             }
 
+            // ใช้ Blink Effect ถ้าเปิดใช้งาน
+            if (useBlinkEffect && BlinkEffect.Instance != null)
+            {
+                bool switchComplete = false;
+
+                // เริ่มกระพริบตา และสลับ environment ตอนกลางการกระพริบ
+                BlinkEffect.Instance.Blink(blinkDuration, () =>
+                {
+                    StartCoroutine(SwitchEnvironmentImmediate());
+                    switchComplete = true;
+                });
+
+                // รอให้การสลับเสร็จ
+                yield return new WaitUntil(() => switchComplete);
+            }
+            else
+            {
+                // สลับแบบปกติ (ไม่มี blink effect)
+                yield return StartCoroutine(SwitchEnvironmentImmediate());
+            }
+        }
+
+        /// <summary>
+        /// สลับ Environment ทันที (ใช้ตอนกลางการกระพริบ)
+        /// </summary>
+        private System.Collections.IEnumerator SwitchEnvironmentImmediate()
+        {
             // ปิด environment ปัจจุบัน
             if (environments[currentEnvironmentIndex] != null)
             {
@@ -111,7 +140,6 @@ namespace MGJ
                 Debug.Log($"[EnvironmentManager] ✓ โหลดเสร็จสิ้น Environment {currentEnvironmentIndex}");
             }
 
-            // รอ 1 frame ให้ environment เริ่มต้น
             yield return null;
         }
 
