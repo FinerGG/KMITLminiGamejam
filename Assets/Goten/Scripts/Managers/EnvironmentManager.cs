@@ -45,10 +45,15 @@ namespace MGJ
         /// </summary>
         public void SwitchToNextEnvironment()
         {
+            StartCoroutine(SwitchToNextEnvironmentCoroutine());
+        }
+
+        private System.Collections.IEnumerator SwitchToNextEnvironmentCoroutine()
+        {
             if (environments.Count == 0)
             {
                 Debug.LogWarning("[EnvironmentManager] ไม่มี Environment ให้สลับ!");
-                return;
+                yield break;
             }
 
             // ปิด environment ปัจจุบัน
@@ -56,6 +61,9 @@ namespace MGJ
             {
                 environments[currentEnvironmentIndex].SetActive(false);
             }
+
+            // รอ 1 frame ให้ Unity ทำการ cleanup
+            yield return null;
 
             // คำนวณ index ถัดไป
             if (randomOrder)
@@ -82,6 +90,9 @@ namespace MGJ
                 environments[currentEnvironmentIndex].SetActive(true);
                 Debug.Log($"[EnvironmentManager] 🔄 สลับไป Environment {currentEnvironmentIndex}: {environments[currentEnvironmentIndex].name}");
             }
+
+            // รอ 1 frame ให้ environment เริ่มต้น
+            yield return null;
         }
 
         /// <summary>
