@@ -511,7 +511,7 @@ MonoBehaviour:
   emailConfig: {fileID: 11400000, guid: fbd0530b5026f6141a4dc2b6026b6c48, type: 2}
   emailSpawnInterval: 30
   virusProbability: 0.5
-  networkApp: {fileID: 6053184373667004216}
+  networkApp: {fileID: 0}
 --- !u!1 &5112057241256291402
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +599,7 @@ GameObject:
   - component: {fileID: 1615294154045590856}
   - component: {fileID: 8152393175334141571}
   - component: {fileID: 1647842733327958754}
-  - component: {fileID: 6053184373667004216}
+  - component: {fileID: 4776333902457182143}
   m_Layer: 9
   m_Name: NetApp
   m_TagString: Untagged
@@ -729,7 +729,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 150, y: 29.757957, z: 0.3}
   m_Center: {x: 0, y: -0.40638375, z: 0}
---- !u!114 &6053184373667004216
+--- !u!114 &4776333902457182143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -738,11 +738,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6243673446209035302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 560fdacd7dc393248a1bb017408e634b, type: 3}
+  m_Script: {fileID: 11500000, guid: f4ff3a8f98b38b244a46cb818ba4b1ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   appName: app
   windowPrefab: {fileID: 1461151482130391913, guid: 7cb99af4ae7f7d045ba0c25157f452ce, type: 3}
+  canvas: {fileID: 5343950895626855520}
 --- !u!1 &7023539090685136870
 GameObject:
   m_ObjectHideFlags: 0

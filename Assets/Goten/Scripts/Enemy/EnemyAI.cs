@@ -5,13 +5,7 @@ using UnityEngine.Events;
 
 namespace MGJ
 {
-    /// <summary>
-    /// AI ของ Enemy แบบ FNAF
-    /// เคลื่อนที่แบบวาป (Teleport) ตาม Waypoint Pattern
-    /// สุ่มว่าจะวาปหรือไม่ในแต่ละรอบ
-    /// หยุดเดินถ้าถูกมองผ่านกล้อง
-    /// </summary>
-    public class EnemyAI : MonoBehaviour
+    public class EnemyAI : Singleton<EnemyAI>
     {
         [Header("Waypoints")]
         [SerializeField] private Transform startWaypoint; // จุดเริ่มต้น (แยกจาก waypoints list)

@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667583272323530958}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.2800007, y: 1.1097202, z: 5.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   movementChanceMultiplier: 1
   isBeingWatched: 1
   isAtDoor: 0
-  isActive: 1
+  isActive: 0
   OnMove:
     m_PersistentCalls:
       m_Calls: []
