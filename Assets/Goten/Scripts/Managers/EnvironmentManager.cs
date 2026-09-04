@@ -81,7 +81,8 @@ namespace MGJ
             else
             {
                 // เดินตามลำดับ
-                currentEnvironmentIndex = (currentEnvironmentIndex + 1) % environments.Count;
+                if (currentEnvironmentIndex < environments.Count - 1)
+                    currentEnvironmentIndex++;
             }
 
             // เปิด environment ใหม่
