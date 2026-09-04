@@ -10,6 +10,8 @@ namespace MGJ
         [Header("CCTV Display")]
         [SerializeField] private RawImage cameraDisplay;
         [SerializeField] private TextMeshProUGUI cameraLabel;
+        [SerializeField] private List<Sprite> unSelectTexture = new List<Sprite>();
+        [SerializeField] private List<Sprite> selectTexture = new List<Sprite>();
 
         [Header("Camera Selector")]
         [SerializeField] private Button[] cameraButtons; // 4 ปุ่ม
@@ -59,24 +61,36 @@ namespace MGJ
             CheckEnemiesInView();
         }
 
+        public void OnDrawGizmos()
+        {
+            if (cameras == null || currentCameraIndex >= cameras.Length)
+                return;
+            Camera currentCam = cameras[currentCameraIndex];
+            if (currentCam == null)
+                return;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(currentCam.transform.position, detectionRange);
+            Vector3 forward = currentCam.transform.forward;
+            Vector3 rightBoundary = Quaternion.Euler(0, detectionAngle * 0.5f, 0) * forward;
+            Vector3 leftBoundary = Quaternion.Euler(0, -detectionAngle * 0.5f, 0) * forward;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(currentCam.transform.position, currentCam.transform.position + rightBoundary * detectionRange);
+            Gizmos.DrawLine(currentCam.transform.position, currentCam.transform.position + leftBoundary * detectionRange);
+        }
+
         public void SwitchCamera(int index)
         {
             if (index < 0 || index >= cameras.Length) return;
 
             currentCameraIndex = index;
-
-            // ����¹ display
             cameraDisplay.texture = renderTextures[index];
-
-            // �ѻവ label
             cameraLabel.text = $"Camera {index + 1}";
 
-            // Highlight ����������͡
             for (int i = 0; i < cameraButtons.Length; i++)
             {
-                ColorBlock colors = cameraButtons[i].colors;
-                colors.normalColor = (i == index) ? Color.green : Color.white;
-                cameraButtons[i].colors = colors;
+                Sprite tex = (i == index) ? selectTexture[i] : unSelectTexture[i];
+                Image img = cameraButtons[i].GetComponentInParent<Image>();
+                img.sprite = tex;
             }
         }
 

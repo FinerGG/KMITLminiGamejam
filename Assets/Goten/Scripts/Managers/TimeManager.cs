@@ -55,6 +55,11 @@ namespace MGJ
                 gameTimer -= realSecondsPerGameMinute;
                 currentMinute++;
 
+                if (currentHour == 0 && currentMinute >= 30)
+                {
+                    EnemyAI.Instance.SetActive(true);
+                }
+
                 // ครบ 60 นาที = 1 ชั่วโมง
                 if (currentMinute >= 60)
                 {
@@ -117,7 +122,11 @@ namespace MGJ
         public float GetEnemyActivityChance()
         {
             if (currentHour == 0)
-                return 0f; // 00:00 ยังไม่เดิน
+            {
+                if (currentMinute >= 30)
+                    return 0.1f;
+                return 0f;
+            }
 
             // 01:00 = 20%, 02:00 = 40%, 03:00 = 60%, 04:00 = 80%, 05:00 = 100%
             return Mathf.Clamp01(currentHour * 0.2f);
