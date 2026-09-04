@@ -18,6 +18,7 @@ namespace MGJ
         [SerializeField] private List<Sprite> DuckImgs;
         [SerializeField] private GameObject DuckContainer;
         [SerializeField] private GameObject DuckPrefab;
+        [SerializeField] private RectTransform DuckSpawnArea; // พื้นที่ spawn ของ duck
 
         [Header("Events")]
         [SerializeField] private float Cooldown = 1.0f;
@@ -27,7 +28,7 @@ namespace MGJ
         private float eventTimer = 0.0f;
         private bool finish = false;
         private int duckCounts = 0;
-        private List<GameObject> ducks;
+        private List<GameObject> ducks = new List<GameObject>();
 
         private void Start()
         {
@@ -76,9 +77,9 @@ namespace MGJ
         {
             DearGoMyLiyKoBox.SetActive(true);
 
-            // ได้ขนาด canvas เพื่อกำหนดพื้นที่ spawn
-            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-            Vector2 canvasSize = canvasRect.sizeDelta;
+            // ใช้ DuckSpawnArea แทน canvas ถ้ามีกำหนดไว้
+            RectTransform spawnArea = DuckSpawnArea != null ? DuckSpawnArea : canvas.GetComponent<RectTransform>();
+            Vector2 spawnSize = spawnArea.sizeDelta;
 
             // Spawn duck ทั้ง 9 ตัวเลย
             for (int i = 0; i < 9; i++)
@@ -88,10 +89,10 @@ namespace MGJ
 
                 duck.GetComponent<Image>().sprite = DuckImgs[Random.Range(0, DuckImgs.Count)];
 
-                // สุ่มตำแหน่ง spawn ภายใน canvas
+                // สุ่มตำแหน่ง spawn ภายใน spawn area
                 RectTransform duckRect = duck.GetComponent<RectTransform>();
-                float randomX = Random.Range(-canvasSize.x / 2f + 50f, canvasSize.x / 2f - 50f);
-                float randomY = Random.Range(-canvasSize.y / 2f + 50f, canvasSize.y / 2f - 50f);
+                float randomX = Random.Range(-spawnSize.x / 2f + 50f, spawnSize.x / 2f - 50f);
+                float randomY = Random.Range(-spawnSize.y / 2f + 50f, spawnSize.y / 2f - 50f);
                 duckRect.anchoredPosition = new Vector2(randomX, randomY);
 
                 Duclk duckCom = duck.GetComponent<Duclk>();
