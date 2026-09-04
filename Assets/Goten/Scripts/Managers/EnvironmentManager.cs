@@ -9,7 +9,9 @@ namespace MGJ
     /// </summary>
     public class EnvironmentManager : Singleton<EnvironmentManager>
     {
-        [Header("Environment Rotation")]
+        [Header("Loading Settings")]
+        [SerializeField] private int objectsPerFrame = 10; // จำนวน object ที่โหลดต่อ frame
+        [SerializeField] private bool useProgressiveLoading = true;
         [SerializeField] private List<GameObject> environments = new List<GameObject>();
         [SerializeField] private int currentEnvironmentIndex = 0;
         [SerializeField] private bool randomOrder = false;
