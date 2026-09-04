@@ -1081,6 +1081,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8124992354451333861, guid: 0e2e9d86e44cdba4b9e3bb8c0355c34a, type: 3}
   m_PrefabInstance: {fileID: 31474079}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &33105878 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2501296779654200186, guid: 2c76dc18cf1568743b58e0a3387bca5d, type: 3}
+  m_PrefabInstance: {fileID: 39030623}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &39030623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37574,6 +37579,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1129933961}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1133299854 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6752475813095637461, guid: e15060aba0976574180ff362fdb87698, type: 3}
+  m_PrefabInstance: {fileID: 1712875631}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1143236046
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41448,6 +41458,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8247780519564532430, guid: ef1f5304dabec4f4093cfe468368efe0, type: 3}
+      propertyPath: reticle
+      value: 
+      objectReference: {fileID: 1133299854}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -67536,7 +67550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48997975f221d964cab110e0d1508a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windowContainer: {fileID: 0}
+  windowContainer: {fileID: 33105878}
 --- !u!4 &1966619854
 Transform:
   m_ObjectHideFlags: 0
