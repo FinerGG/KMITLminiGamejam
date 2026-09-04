@@ -61,7 +61,14 @@ namespace MGJ
             // ปิด environment ปัจจุบัน
             if (environments[currentEnvironmentIndex] != null)
             {
-                environments[currentEnvironmentIndex].SetActive(false);
+                if (useProgressiveLoading)
+                {
+                    yield return StartCoroutine(DeactivateEnvironmentProgressive(environments[currentEnvironmentIndex]));
+                }
+                else
+                {
+                    environments[currentEnvironmentIndex].SetActive(false);
+                }
             }
 
             // รอ 1 frame ให้ Unity ทำการ cleanup
@@ -90,11 +97,92 @@ namespace MGJ
             // เปิด environment ใหม่
             if (environments[currentEnvironmentIndex] != null)
             {
-                environments[currentEnvironmentIndex].SetActive(true);
-                Debug.Log($"[EnvironmentManager] 🔄 สลับไป Environment {currentEnvironmentIndex}: {environments[currentEnvironmentIndex].name}");
+                Debug.Log($"[EnvironmentManager] 🔄 กำลังโหลด Environment {currentEnvironmentIndex}: {environments[currentEnvironmentIndex].name}");
+
+                if (useProgressiveLoading)
+                {
+                    yield return StartCoroutine(ActivateEnvironmentProgressive(environments[currentEnvironmentIndex]));
+                }
+                else
+                {
+                    environments[currentEnvironmentIndex].SetActive(true);
+                }
+
+                Debug.Log($"[EnvironmentManager] ✓ โหลดเสร็จสิ้น Environment {currentEnvironmentIndex}");
             }
 
             // รอ 1 frame ให้ environment เริ่มต้น
+            yield return null;
+        }
+
+        /// <summary>
+        /// เปิด Environment แบบค่อยเป็นค่อยไป เพื่อลด lag spike
+        /// </summary>
+        private System.Collections.IEnumerator ActivateEnvironmentProgressive(GameObject environment)
+        {
+            // เปิด GameObject หลักก่อน (แต่ยังไม่เปิด children)
+            environment.SetActive(true);
+            yield return null;
+
+            // ดึง children ทั้งหมด (level แรกเท่านั้น)
+            Transform[] children = new Transform[environment.transform.childCount];
+            for (int i = 0; i < environment.transform.childCount; i++)
+            {
+                children[i] = environment.transform.GetChild(i);
+                children[i].gameObject.SetActive(false); // ปิดไว้ก่อน
+            }
+
+            // เปิดทีละหลายๆ object ต่อ frame
+            int count = 0;
+            foreach (Transform child in children)
+            {
+                if (child != null)
+                {
+                    child.gameObject.SetActive(true);
+                    count++;
+
+                    // ถ้าเปิดครบตามจำนวนที่กำหนด ให้รอ 1 frame
+                    if (count >= objectsPerFrame)
+                    {
+                        count = 0;
+                        yield return null;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        /// <summary>
+        /// ปิด Environment แบบค่อยเป็นค่อยไป
+        /// </summary>
+        private System.Collections.IEnumerator DeactivateEnvironmentProgressive(GameObject environment)
+        {
+            // ปิด children ก่อน
+            Transform[] children = new Transform[environment.transform.childCount];
+            for (int i = 0; i < environment.transform.childCount; i++)
+            {
+                children[i] = environment.transform.GetChild(i);
+            }
+
+            int count = 0;
+            foreach (Transform child in children)
+            {
+                if (child != null && child.gameObject.activeSelf)
+                {
+                    child.gameObject.SetActive(false);
+                    count++;
+
+                    if (count >= objectsPerFrame)
+                    {
+                        count = 0;
+                        yield return null;
+                    }
+                }
+            }
+
+            // ปิด GameObject หลัก
+            environment.SetActive(false);
             yield return null;
         }
 
