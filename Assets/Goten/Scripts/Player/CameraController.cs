@@ -180,6 +180,7 @@ namespace MGJ
             _offsetRotAxes = Vector3.zero;
             _cameraTurnEnable = true;
             _yawLimit = defaultYawLimit;
+            ApplyCameraPose();
         }
 
         public void SetCameraTurnEnable(bool turnEnable)

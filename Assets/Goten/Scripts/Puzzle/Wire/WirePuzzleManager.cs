@@ -10,7 +10,7 @@ namespace MGJ.Puzzle
     /// รองรับการลากสายจากซ้ายไปขวา หรือขวาไปซ้าย
     /// เมื่อต่อถูกทั้งหมดจะทริกเกอร์ OnPuzzleSolved event
     /// </summary>
-    public class WirePuzzleManager : MonoBehaviour
+    public class WirePuzzleManager : Singleton<WirePuzzleManager>
     {
         [Header("Wire Configuration")]
         [SerializeField] private List<WireStretchController> leftWires = new List<WireStretchController>();

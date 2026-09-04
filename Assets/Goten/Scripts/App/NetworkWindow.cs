@@ -24,6 +24,7 @@ namespace MGJ
         [SerializeField] private float Cooldown = 1.0f;
         [Range(0.0f, 100.0f)][SerializeField] private float EventPercent = 10.0f;
 
+        private bool isEventActive = false;
         private float progress = 0.0f;
         private float eventTimer = 0.0f;
         private bool finish = false;
@@ -33,37 +34,55 @@ namespace MGJ
         private void Start()
         {
             DearGoMyLiyKoBox.SetActive(false);
+
+            if (GameStateManager.Instance != null)
+            {
+                GameStateManager.Instance.OnGameReset.AddListener(RestartProgress);
+            }
+            else
+            {
+                Debug.LogWarning("[NetworkWindow] ไม่พบ GameStateManager!");
+            }
         }
 
         private void Update()
         {
             if (gameObject.activeSelf)
             {
-                if (DearGoMyLiyKoBox.activeSelf)
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (duckCounts >= 9)
-                        DearGoMyLiyKoEnd();
-                    return;
-                }
-
-                eventTimer += Time.deltaTime;
-                if (eventTimer >= Cooldown)
-                {
-                    eventTimer = 0.0f;
-                    if (Random.Range(0f, 100f) < EventPercent)
-                    {
-                        int random = Random.Range(0, 0);
-                        switch (random)
-                        {
-                            case 0: DearGoMyLiyKoStart(); break;
-                        }
-                    }
+                    isEventActive = !isEventActive;
+                    Debug.Log("Event Active: " + isEventActive);
                 }
 
                 if (finish)
                 {
                     //
                     return;
+                }
+
+                if (isEventActive)
+                {
+                    if (DearGoMyLiyKoBox.activeSelf)
+                    {
+                        if (duckCounts >= 9)
+                            DearGoMyLiyKoEnd();
+                        return;
+                    }
+
+                    eventTimer += Time.deltaTime;
+                    if (eventTimer >= Cooldown)
+                    {
+                        eventTimer = 0.0f;
+                        if (Random.Range(0f, 100f) < EventPercent)
+                        {
+                            int random = Random.Range(0, 0);
+                            switch (random)
+                            {
+                                case 0: DearGoMyLiyKoStart(); break;
+                            }
+                        }
+                    }
                 }
 
                 progress += Time.deltaTime;

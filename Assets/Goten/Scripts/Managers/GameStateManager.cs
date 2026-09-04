@@ -124,6 +124,11 @@ namespace MGJ
                 CameraController.Instance.ReCamera();
             }
 
+            if (WirePuzzleManager.Instance != null)
+            {
+                WirePuzzleManager.Instance.ResetPuzzle();
+            }
+
             OnGameReset?.Invoke();
             Debug.Log("[GameStateManager] 🔄 รีเซ็ตเกม");
         }

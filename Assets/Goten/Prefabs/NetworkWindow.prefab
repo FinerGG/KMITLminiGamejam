@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7009351963559088709}
   - component: {fileID: 5166529526646754135}
   - component: {fileID: 8434602691803016427}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ResizeHandleBottomLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 7894948192691964544}
   - component: {fileID: 1829220301393083902}
   - component: {fileID: 5108719599969784702}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: DearGoMyliko
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 5000196955797554893}
   - component: {fileID: 1306354958740287112}
   - component: {fileID: 1011530101089987064}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: NetworkWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ MonoBehaviour:
   handleSize: 10
   canvas: {fileID: 0}
   progressBar: {fileID: 3645855759447064913}
-  progressComplete: 100
+  progressComplete: 20
   DearGoMyLiyKoBox: {fileID: 740944119041530070}
   DuckImgs:
   - {fileID: 21300000, guid: 6451f4f6a3b3585448a6408b9733931d, type: 3}
@@ -272,8 +272,8 @@ MonoBehaviour:
   DuckContainer: {fileID: 5646788284914279844}
   DuckPrefab: {fileID: 5607647854744976833, guid: 6275d84ddcb4c09438a7552c3168d6ab, type: 3}
   DuckSpawnArea: {fileID: 3225814154550132554}
-  Cooldown: 1
-  EventPercent: 100
+  Cooldown: 2
+  EventPercent: 70
 --- !u!1 &1722036381047392215
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 7887436809374593083}
   - component: {fileID: 1291770724519963601}
   - component: {fileID: 4220847109500022189}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: TitleBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 4658217778935503804}
   - component: {fileID: 6499981907282253250}
   - component: {fileID: 6686223845295447287}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ResizeHandleTopLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 1898730589827163704}
   - component: {fileID: 6189931664043579249}
   - component: {fileID: 6081856884533085455}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: BackgroundBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 7408441455126317439}
   - component: {fileID: 3188715843961747746}
   - component: {fileID: 494170483883051578}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ResizeHandles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 3013644467610250413}
   - component: {fileID: 7214424128947105471}
   - component: {fileID: 3883499238181517422}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,7 +744,7 @@ GameObject:
   - component: {fileID: 5125521014936986597}
   - component: {fileID: 442818267881584619}
   - component: {fileID: 2186971891209856572}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 7508977468392484254}
   - component: {fileID: 7186225857173549585}
   - component: {fileID: 7899893478772702971}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,7 +983,7 @@ GameObject:
   - component: {fileID: 8715800877429978496}
   - component: {fileID: 3420960214566382953}
   - component: {fileID: 8513289630190850273}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ContentArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 3389825192303683837}
   - component: {fileID: 1021765842498773430}
   - component: {fileID: 3645855759447064913}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: FillBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1133,7 +1133,7 @@ GameObject:
   - component: {fileID: 1705626534607397857}
   - component: {fileID: 8042148372983706283}
   - component: {fileID: 4692549013389092254}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ResizeHandleTopRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1208,7 +1208,7 @@ GameObject:
   - component: {fileID: 4176189408201016007}
   - component: {fileID: 5095519489657521667}
   - component: {fileID: 1731498908715923688}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1285,7 +1285,7 @@ GameObject:
   - component: {fileID: 1502850121597523289}
   - component: {fileID: 418620748939292700}
   - component: {fileID: 673233623219626519}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1427,7 +1427,7 @@ GameObject:
   - component: {fileID: 4002714181988727741}
   - component: {fileID: 3681980539449543004}
   - component: {fileID: 173805238025344604}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Max
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1568,7 +1568,7 @@ GameObject:
   - component: {fileID: 4215009293298331953}
   - component: {fileID: 6353616357660867520}
   - component: {fileID: 6523828796349690912}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: ResizeHandleBottomRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

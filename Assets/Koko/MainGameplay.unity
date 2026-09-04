@@ -1094,6 +1094,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1327915361992604013, guid: 2c76dc18cf1568743b58e0a3387bca5d, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1622679847156069960, guid: 2c76dc18cf1568743b58e0a3387bca5d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.128
@@ -34093,6 +34097,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7196664481311612025, guid: 073739d340957f443892f1a1e2becfdf, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7432183037984636704, guid: 073739d340957f443892f1a1e2becfdf, type: 3}
       propertyPath: enemyAI
       value: 
@@ -41650,6 +41658,10 @@ PrefabInstance:
       propertyPath: reticle
       value: 
       objectReference: {fileID: 1133299854}
+    - target: {fileID: 8947774238151134274, guid: ef1f5304dabec4f4093cfe468368efe0, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -67171,6 +67183,10 @@ PrefabInstance:
     - target: {fileID: 3227949343032903058, guid: 0360b56c5fc3906469a699e536ec6b4e, type: 3}
       propertyPath: m_Name
       value: ServerPuzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937120199543347325, guid: 0360b56c5fc3906469a699e536ec6b4e, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
