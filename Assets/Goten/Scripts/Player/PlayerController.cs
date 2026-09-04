@@ -11,9 +11,8 @@ namespace MGJ
         private Quaternion initialRotation;
         private Transform playerTransform;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             playerTransform = transform;
 
             // บันทึกตำแหน่งและการหมุนเริ่มต้น
