@@ -125,6 +125,12 @@ namespace MGJ
                 CameraController.Instance.ReCamera();
             }
 
+            // รีเซ็ตตำแหน่งและการหมุนของผู้เล่น
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.ResetToSpawnPoint();
+            }
+
             // รีเซ็ต WirePuzzle
             if (WirePuzzleManager.Instance != null)
             {
