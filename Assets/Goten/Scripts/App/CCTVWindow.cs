@@ -145,9 +145,6 @@ namespace MGJ
             }
         }
 
-        /// <summary>
-        /// ปิด Enemy detection ทั้งหมด
-        /// </summary>
         private void ClearEnemyDetection()
         {
             foreach (var enemy in detectedEnemies)
