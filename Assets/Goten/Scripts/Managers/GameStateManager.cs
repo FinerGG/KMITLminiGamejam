@@ -53,8 +53,23 @@ namespace MGJ
             OnPlayerDied?.Invoke();
             Debug.Log("[GameStateManager] ☠ ผู้เล่นตาย");
 
-            // รีเซ็ตหลังจาก 2 วินาที
-            Invoke(nameof(ResetGame), 2f);
+            // รีเซ็ตและสลับ environment หลังจาก jumpscare (ควรปรับเวลาตาม jumpscare duration)
+            Invoke(nameof(ResetAndSwitchEnvironment), 3f);
+        }
+
+        /// <summary>
+        /// รีเซ็ตเกมและสลับไป Environment ใหม่
+        /// </summary>
+        private void ResetAndSwitchEnvironment()
+        {
+            // สลับไป Environment ถัดไป
+            if (EnvironmentManager.Instance != null)
+            {
+                EnvironmentManager.Instance.SwitchToNextEnvironment();
+            }
+
+            // รีเซ็ตเกม
+            ResetGame();
         }
 
         public void PlayerWon()
