@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using MGJ.Puzzle;
 
 namespace MGJ
 {
@@ -124,6 +125,7 @@ namespace MGJ
                 CameraController.Instance.ReCamera();
             }
 
+            // รีเซ็ต WirePuzzle
             if (WirePuzzleManager.Instance != null)
             {
                 WirePuzzleManager.Instance.ResetPuzzle();
